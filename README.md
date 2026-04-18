@@ -15,19 +15,17 @@ Phase 1: In-memory storage
 
 
 ## Endpoints
-
 GET /api/loan  
 GET /api/loan/{customerId}  
 POST /api/loan/apply  
 
 ## Sample Request
-
 {
   "customerId": 1,
   "amount": 500
 }
 
-Phase 2: ## Phase 2 - Database Integration SQL Server with Service layer added
+Phase 2: Database Integration SQL Server with Service layer added
 - Integrated SQL Server using EF Core
 - Implemented DbContext for data access
 - Added Service Layer for business logic
