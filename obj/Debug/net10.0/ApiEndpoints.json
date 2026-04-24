@@ -1,24 +1,46 @@
 [
   {
     "ContainingType": "LoanAPI.Controllers.LoanController",
-    "Method": "GetAll",
-    "RelativePath": "api/Loan",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LoanAPI.Controllers.LoanController",
     "Method": "GetCustomerById",
-    "RelativePath": "api/Loan/{customerId}",
+    "RelativePath": "api/Loan",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "customerId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LoanAPI.Controllers.LoanController",
+    "Method": "Create",
+    "RelativePath": "api/Loan",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loan",
+        "Type": "LoanAPI.Models.Loan",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LoanAPI.Controllers.LoanController",
+    "Method": "GetById",
+    "RelativePath": "api/Loan/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -27,15 +49,36 @@
   },
   {
     "ContainingType": "LoanAPI.Controllers.LoanController",
-    "Method": "Apply",
-    "RelativePath": "api/Loan/apply",
-    "HttpMethod": "POST",
+    "Method": "Delete",
+    "RelativePath": "api/Loan/{id}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "loan",
-        "Type": "LoanAPI.Models.Loan",
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LoanAPI.Controllers.LoanController",
+    "Method": "UpdateAmount",
+    "RelativePath": "api/Loan/{id}/amount",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LoanAPI.Models.UpdateLoanAmountDto",
         "IsRequired": true
       }
     ],

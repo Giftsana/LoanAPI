@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LoanAPI.Data;
+﻿using LoanAPI.Data;
 using LoanAPI.Models;
-using Microsoft.EntityFrameworkCore;
 using LoanAPI.Services;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace LoanAPI.Controllers
 {
@@ -17,31 +20,69 @@ namespace LoanAPI.Controllers
         {
             _loanService = loanService;
         }
+                
         [HttpGet]
-        public  async Task<IActionResult> GetAll()
-        {            
-            var loans = await _loanService.GetAllAsync();
-            return Ok(loans);
-        }
-        [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetCustomerById(int customerId)
+        public async Task<IActionResult> GetCustomerById([FromQuery] int? customerId)
         {
-            var loans = await _loanService.GetCustomerByIdAsync(customerId);
+            if (customerId.HasValue)
+            {
+                var loans = await _loanService.GetCustomerByIdAsync(customerId.Value);
 
-            if (!loans.Any())
-                return NotFound($"No loan found for customer {customerId}");
-            return Ok(loans);
+                if (loans == null || !loans.Any())
+                    return NotFound($"No loan found for customer {customerId}");
+
+                return Ok(loans);
+            }
+
+            var allloans = await _loanService.GetAllAsync();
+            return Ok(allloans);
         }
-        [HttpPost("apply")]
-        public async Task<IActionResult> Apply([FromBody] Loan loan)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _loanService.GetByIdAsync(id);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Loan loan)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _loanService.ApplyLoanAsync(loan);
-            return Ok(result);            
+            var result = await _loanService.CreateLoanAsync(loan);
+            return CreatedAtAction(nameof(GetById), new { id = result.LoanId }, result);
         }
-        
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _loanService.DeleteLoanAsync(id);
+
+            if (!deleted)
+                return NotFound();
+
+            return NoContent(); //status code 204
+        }
+        [HttpPatch("{id}/amount")]
+        public async Task<IActionResult> UpdateAmount(int id, [FromBody] UpdateLoanAmountDto dto)
+        {
+            if (dto == null || !dto.Amount.HasValue)
+                return BadRequest("Amount is required");
+            try
+            {
+                var updated = await _loanService.UpdateAmountAsync(id, dto);
+                if (!updated)
+                    return NotFound();
+                return NoContent();//status code 204
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
+
