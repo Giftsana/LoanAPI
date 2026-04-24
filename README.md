@@ -32,6 +32,6 @@ Phase 2: Database Integration SQL Server with Service layer added
 - Removed in-memory repository
 - Implemented async operations
 
-Phase 3: Added patch endpoint for updating loan amopunt
+Phase 3: Added patch endpoint for updating loan amount
 ## Sample request
 PATCH /api/loan/10/amount
